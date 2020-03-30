@@ -1,0 +1,50 @@
+/*объявляется статический метод функции*/
+/*объявление переменных */
+static int Func1(KeyValuePair<int, string>[] a, int low, int high, int key)
+{/*задается формула нахождения среднего*/
+  int middle = low + ((high - low)/2);
+ /*если переменная low равна high, то будет возвращаться значение low*/
+  if (low == high)
+    return low;
+ /*если значение key больше значеня массива с индексом = middle свойства Key,
+ то функция вернет значения middle на 1 больше*/
+  if (key > a[middle].Key)
+    return Func1(a, middle + 1, high, key);
+ /*исходя из всех условий, функция Func1 вернет значения в данном виде */
+  return Func1(a, low, middle, key);
+}
+ /*объявляется статический метод функции*/
+static void Func2(ref KeyValuePair<int, string>[] a, int key, string value)
+{
+  int pos;
+  KeyValuePair<int, string> keyValuePair;
+ /*если длина а равна 0*/
+  if (a.Length == 0)
+  /*меняется длина массива на 1*/
+  {
+    Array.Resize(ref a, 1);
+    /*присваивается новое значение переменныой*/
+    keyValuePair = new KeyValuePair<int, string>(key, value);
+    /*первый элемент массива = keyValuePair и выводится*/
+    a[0] = keyValuePair;
+    return;
+  }
+ /*если key меньше первого элемента, то  pos = 0*/
+  if (key < a[0].Key)
+    pos = 0;
+    /*если key больше предпоследнего элемента массива а, то pos равен длине а*/
+  else if (key > a[a.Length - 1].Key) 
+    pos = a.Length;
+    /*иначе pos= функции(а,0, предпоследний эл а, key)*/
+  else
+    pos = Func1(a, 0, a.Length - 1, key);
+ /*изеняется длина массива на эл больше предыдущей длины*/
+  Array.Resize(ref a, a.Length + 1);
+  /*задается цикл предпослднео эл а, длина которого должа бть строго больше pos*/
+  for (int i = a.Length - 1; i > pos; i--)
+  /*i-му эл массива а присваивается значение предыдущего эл. (усл выполняеся пока i не будет = или меньше pos)*/
+    a[i] = a[i - 1];
+ 
+  keyValuePair = new KeyValuePair<int, string>(key, value);
+  a[pos] = keyValuePair;
+}
